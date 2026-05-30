@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hack &amp; Aprende</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03080e;--sf:#07111c;--card:#0a1828;--bd:#0e2035;--bd2:#162840;
+  --glow:#00c8ff;--glow2:#ff2d55;--glow3:#ffd60a;--safe:#00ff88;
+  --pu:#a855f7;--li:#a3e635;--bl:#60a5fa;
+  --text:#c8e0f0;--muted:#3a5a78;--muted2:#5a7a99;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Bebas Neue',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --max:1400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,200,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.022) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+.scanline{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.55),transparent);animation:scan 5s linear infinite;z-index:999;pointer-events:none;}
+@keyframes scan{from{top:-3px;}to{top:100vh;}}
+nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bd);background:rgba(3,8,14,.96);}
+.ni{max-width:var(--max);margin:0 auto;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1;}
+.logo{cursor:pointer;display:flex;align-items:center;border:none;background:none;padding:4px 0;transition:opacity .2s,filter .2s;}.logo:hover{opacity:.85;filter:drop-shadow(0 0 10px rgba(180,30,30,.6));}
+.nl{display:flex;gap:4px;list-style:none;}
+.nl button{background:none;border:none;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:3px;cursor:pointer;transition:color .2s,background .2s;}
+.nl button:hover,.nl button.on{color:var(--glow);background:rgba(0,200,255,.07);}
+.admin-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--bd);padding:7px 16px;border-radius:3px;cursor:pointer;transition:all .2s;}
+.admin-link:hover{color:var(--glow);border-color:var(--glow);}
+.hero{max-width:var(--max);margin:0 auto;padding:80px 40px 64px;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:end;border-bottom:1px solid var(--bd);position:relative;z-index:1;}
+@media(max-width:1024px){.hero{grid-template-columns:1fr 340px;gap:48px;padding:60px 28px 48px;}}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding:44px 20px 36px;}}
+.hero-corner{position:absolute;top:0;right:0;width:320px;height:320px;background:radial-gradient(circle at top right,rgba(0,200,255,.1),transparent 70%);pointer-events:none;}
+.he{font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;color:var(--glow);text-transform:uppercase;display:flex;align-items:center;gap:9px;margin-bottom:20px;}
+.he::before{content:'';width:24px;height:1px;background:var(--glow);}
+.hero h1{font-family:var(--display);font-size:clamp(2.8rem,5vw,7rem);line-height:.94;letter-spacing:.02em;color:#fff;margin-bottom:20px;white-space:nowrap;}
+.hero h1 span{color:var(--glow);text-shadow:0 0 40px rgba(0,200,255,.4);}
+.hs{font-size:.95rem;color:var(--muted);font-family:var(--mono);letter-spacing:.04em;max-width:520px;margin-bottom:32px;display:flex;align-items:center;gap:.5rem;}
+.blink{animation:blink 1.2s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.stats{display:flex;gap:40px;}
+.sn{font-family:var(--display);font-size:2.8rem;color:var(--glow);line-height:1;}
+.sl{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.term{background:var(--card);border:1px solid rgba(0,200,255,.18);border-radius:10px;overflow:hidden;font-family:var(--mono);}
+.tbar{background:rgba(0,200,255,.04);border-bottom:1px solid rgba(0,200,255,.12);padding:11px 16px;display:flex;align-items:center;gap:6px;}
+.dr{width:12px;height:12px;border-radius:50%;background:#ff5f57;}
+.dy{width:12px;height:12px;border-radius:50%;background:#febc2e;}
+.dg{width:12px;height:12px;border-radius:50%;background:#28c840;}
+.tttl{margin-left:8px;font-size:.68rem;color:var(--muted);letter-spacing:.1em;}
+.tbody{padding:22px;font-size:.82rem;line-height:2;color:var(--muted);}
+.cg{color:var(--safe);}.cp{color:var(--pu);}.ct{color:var(--glow);}
+.tfoot-bar{background:rgba(0,0,0,.3);border-top:1px solid rgba(0,200,255,.08);padding:7px 16px;display:flex;justify-content:space-between;align-items:center;}
+.tfoot-l{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.tfoot-r{font-size:.62rem;color:var(--glow);display:flex;align-items:center;gap:5px;}
+.online-dot{width:6px;height:6px;border-radius:50%;background:var(--safe);box-shadow:0 0 6px rgba(0,255,136,.7);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.cur{display:inline-block;width:8px;height:14px;background:var(--safe);margin-left:2px;animation:blink 1s step-end infinite;vertical-align:middle;border-radius:1px;}
+.main{max-width:var(--max);margin:0 auto;padding:52px 40px 100px;display:grid;grid-template-columns:1fr 320px;gap:52px;align-items:start;position:relative;z-index:1;}
+@media(max-width:1024px){.main{padding:44px 28px 80px;gap:36px;}}
+@media(max-width:860px){.main{grid-template-columns:1fr;padding:36px 20px 80px;}}
+.sw{position:relative;margin-bottom:22px;}
+.sico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:.82rem;color:var(--muted);pointer-events:none;}
+#si{width:100%;background:var(--card);border:1px solid var(--bd);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.82rem;padding:13px 16px 13px 38px;outline:none;transition:border-color .2s;}
+#si::placeholder{color:var(--muted);}
+#si:focus{border-color:rgba(0,200,255,.4);}
+.fb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:36px;}
+.flbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-right:4px;}
+.chip{font-family:var(--mono);font-size:.65rem;letter-spacing:.07em;padding:5px 13px;border-radius:3px;border:1px solid var(--bd);background:none;color:var(--muted);cursor:pointer;text-transform:uppercase;transition:all .18s;}
+.chip:hover{border-color:var(--muted2);color:var(--text);}
+.chip.on{color:#03080e;border-color:transparent;}
+.ca.on{background:var(--glow);}
+.cn.on{background:var(--pu);}
+.cno.on{background:var(--glow);}
+.ce.on{background:var(--glow3);color:#1a1000;}
+.ch.on{background:var(--bl);}
+.ctu.on{background:var(--glow2);}
+.cc.on{background:var(--li);color:#0a1500;}
+.loading{text-align:center;padding:60px 20px;font-family:var(--mono);color:var(--muted);font-size:.8rem;letter-spacing:.1em;}
+.pl{display:flex;flex-direction:column;gap:18px;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:28px 32px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .22s,transform .2s,box-shadow .22s;animation:fadeUp .4s ease both;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--glow),transparent);opacity:0;transition:opacity .22s;}
+.card:hover{border-color:rgba(0,200,255,.35);transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,200,255,.07);}
+.card:hover::before{opacity:1;}
+.card:hover .ctit{color:var(--glow);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.ctop{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;}
+.badge{font-family:var(--mono);font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;padding:3px 10px;border-radius:3px;font-weight:700;}
+.ba{background:rgba(168,85,247,.12);color:var(--pu);border:1px solid rgba(168,85,247,.25);}
+.bn{background:rgba(0,200,255,.08);color:var(--glow);border:1px solid rgba(0,200,255,.2);}
+.be{background:rgba(255,214,10,.1);color:var(--glow3);border:1px solid rgba(255,214,10,.25);}
+.bh{background:rgba(96,165,250,.1);color:var(--bl);border:1px solid rgba(96,165,250,.25);}
+.btu{background:rgba(255,45,85,.1);color:var(--glow2);border:1px solid rgba(255,45,85,.25);}
+.bc{background:rgba(163,230,53,.08);color:var(--li);border:1px solid rgba(163,230,53,.2);}
+.cdate{font-family:var(--mono);font-size:.64rem;color:var(--muted);letter-spacing:.06em;}
+.ctit{font-family:var(--display);font-size:1.7rem;letter-spacing:.02em;color:#fff;margin-bottom:9px;transition:color .2s;line-height:1.1;}
+.cexc{font-size:.97rem;color:#7a9bb5;line-height:1.7;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.cfoot{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:.64rem;color:var(--muted);}
+.rm{color:var(--glow);font-size:.66rem;}
+.nr{text-align:center;padding:56px 20px;font-family:var(--mono);color:var(--muted);font-size:.8rem;display:none;}
+.estate{text-align:center;padding:72px 20px;display:none;}
+.estate h3{font-family:var(--display);font-size:2.4rem;color:var(--muted);margin-bottom:9px;}
+.estate p{font-family:var(--mono);font-size:.74rem;color:var(--muted);letter-spacing:.07em;}
+.sb{display:flex;flex-direction:column;gap:20px;}
+.sbb{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;}
+.sbh{padding:13px 18px;border-bottom:1px solid var(--bd);font-family:var(--mono);font-size:.62rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px;}
+.sbh span{color:var(--glow);}
+.sbd{padding:14px 18px;}
+.citem{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:.7rem;cursor:pointer;padding:6px;border-radius:3px;margin-bottom:5px;transition:background .15s;}
+.citem:hover{background:rgba(0,200,255,.04);}
+.cleft{display:flex;align-items:center;gap:8px;}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cnam{color:#7a9bb5;letter-spacing:.05em;}
+.cco{background:rgba(0,0,0,.3);color:var(--muted);padding:2px 8px;border-radius:8px;font-size:.6rem;border:1px solid var(--bd);}
+.ritem{padding:12px 0;border-bottom:1px solid var(--bd);cursor:pointer;}
+.ritem:last-child{border-bottom:none;padding-bottom:0;}
+.ritem:hover .rtt{color:var(--glow);}
+.rca{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;}
+.rtt{font-family:var(--display);font-size:1.05rem;letter-spacing:.02em;color:#fff;transition:color .2s;}
+.rda{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:3px;}
+.tagc{display:flex;flex-wrap:wrap;gap:6px;}
+.tagp{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;padding:3px 9px;border:1px solid var(--bd);border-radius:3px;color:var(--muted);cursor:pointer;background:none;transition:all .15s;}
+.tagp:hover{border-color:var(--glow);color:var(--glow);}
+.aw{display:none;position:relative;z-index:1;}
+.ainr{max-width:860px;margin:0 auto;padding:60px 40px 120px;}
+@media(max-width:900px){.ainr{padding:48px 20px 100px;}}
+.bbtn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;margin-bottom:44px;text-transform:uppercase;transition:color .2s;}
+.bbtn:hover{color:var(--glow);}
+.aeye{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.atit{font-family:var(--display);font-size:clamp(2.8rem,5vw,5rem);line-height:.93;letter-spacing:.02em;color:#fff;margin-bottom:20px;}
+.ameta{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.09em;padding-bottom:28px;border-bottom:1px solid var(--bd);margin-bottom:36px;flex-wrap:wrap;}
+.asep{color:var(--bd2);}
+.abody{font-size:1.08rem;line-height:1.9;color:#8aabbf;}
+.abody p{margin-bottom:20px;}
+.abody h2{font-family:var(--display);font-size:2.2rem;letter-spacing:.02em;margin:44px 0 14px;color:#fff;}
+.abody h3{font-family:var(--mono);font-size:.9rem;color:var(--glow);margin:28px 0 10px;letter-spacing:.08em;text-transform:uppercase;}
+.abody strong{color:#ddeeff;font-weight:600;}
+.abody em{color:var(--pu);font-style:italic;}
+.abody code{font-family:var(--mono);font-size:.82em;background:rgba(0,200,255,.07);border:1px solid rgba(0,200,255,.15);padding:2px 7px;border-radius:3px;color:var(--glow);}
+.abody blockquote{border-left:3px solid var(--glow2);padding:18px 26px;margin:24px 0;background:rgba(255,45,85,.05);border-radius:0 6px 6px 0;font-style:italic;color:#8aabbf;}
+.abody ul{padding-left:0;list-style:none;margin-bottom:20px;}
+.abody ul li{padding:5px 0 5px 22px;position:relative;color:#7a9bb5;}
+.abody ul li::before{content:'▸';position:absolute;left:0;color:var(--glow);font-size:.75rem;top:8px;}
+footer{border-top:1px solid var(--bd);padding:28px 40px;max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;position:relative;z-index:1;}
+@media(max-width:600px){footer{padding:24px 20px;}}
+.fleft{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.09em;}
+.fleft strong{color:var(--glow);}
+.ftags{display:flex;gap:5px;flex-wrap:wrap;}
+.ftag{font-family:var(--mono);font-size:.6rem;border:1px solid var(--bd);color:var(--muted);padding:3px 9px;border-radius:3px;}
+@media(max-width:600px){
+  .ni{padding:0 16px;}
+  .hero{padding:36px 16px 28px;}
+  .main{padding:28px 16px 60px;}
+  footer{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<nav>
+  <div class="ni">
+    <button class="logo" onclick="goHome()">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" height="56" width="auto">
+  <!-- TRIDENT -->
+  <!-- Main shaft -->
+  <rect x="30" y="28" width="4" height="30" rx="1.5" fill="#00c8ff"/>
+  <!-- Center prong -->
+  <rect x="30" y="8" width="4" height="22" rx="1.5" fill="#00c8ff"/>
+  <polygon points="32,2 27,12 37,12" fill="#00c8ff"/>
+  <!-- Left prong -->
+  <rect x="20" y="14" width="3.5" height="16" rx="1.5" fill="#00c8ff"/>
+  <polygon points="21.75,8 17,17 26.5,17" fill="#00c8ff"/>
+  <!-- Right prong -->
+  <rect x="40.5" y="14" width="3.5" height="16" rx="1.5" fill="#00c8ff"/>
+  <polygon points="42.25,8 37.5,17 47,17" fill="#00c8ff"/>
+  <!-- Crossbar connecting prongs -->
+  <rect x="17" y="28" width="30" height="3" rx="1.5" fill="#00c8ff"/>
+  <!-- Grip detail lines -->
+  <rect x="29" y="42" width="6" height="2" rx="1" fill="#00c8ff" opacity=".7"/>
+  <rect x="29" y="47" width="6" height="2" rx="1" fill="#00c8ff" opacity=".7"/>
+  <rect x="29" y="52" width="6" height="2" rx="1" fill="#00c8ff" opacity=".7"/>
+  <!-- Base -->
+  <rect x="26" y="57" width="12" height="3" rx="1.5" fill="#00c8ff"/>
+  <!-- Glow effect -->
+  <rect x="30" y="8" width="4" height="50" rx="1.5" fill="url(#tg)" opacity=".3"/>
+  <defs>
+    <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00c8ff"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+  <!-- Text: CYBER SECURITY -->
+  <text x="68" y="28" font-family="Bebas Neue,sans-serif" font-size="22" fill="#ffffff" letter-spacing="3">CYBER SECURITY</text>
+  <!-- Text: DEFEND. DETECT. RESPOND. -->
+  <text x="68" y="44" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#8899b0" letter-spacing="2.5">DEFEND. DETECT. RESPOND.</text>
+  <!-- Triangle symbol -->
+  <polygon points="140,52 144,59 136,59" fill="none" stroke="#00c8ff" stroke-width="1"/>
+</svg>
+</button>
+    <ul class="nl"><li><button id="nb1" onclick="goHome()" class="on">Inicio</button></li></ul>
+    <button class="admin-link" onclick="window.location.href='admin.html'">&#128274; Admin</button>
+  </div>
+</nav>
+
+<div id="hw">
+  <div class="hero">
+    <div class="hero-corner"></div>
+    <div>
+      <div class="he">INFORMATION IS POWER. / PROTECT IT.</div>
+      <h1>HACK &amp; <span>APRENDE</span></h1>
+      <p class="hs">// análisis · anécdotas · noticias · herramientas <span class="blink">█</span></p>
+      <div class="stats">
+        <div><div class="sn" id="tc">—</div><div class="sl">Posts</div></div>
+        <div><div class="sn">6</div><div class="sl">Categorías</div></div>
+        <div><div class="sn" id="lastup">—</div><div class="sl">Último post</div></div>
+      </div>
+    </div>
+    <div class="term">
+      <div class="tbar"><div class="dr"></div><div class="dy"></div><div class="dg"></div><span class="tttl">hack-y-aprende ~ terminal</span></div>
+      <div class="tbody">
+        <div><span class="cg">$</span> <span class="ct">whoami</span></div>
+        <div style="color:var(--muted)">→ Analista · Investigador · Aprendiz</div>
+        <div style="margin-top:7px"><span class="cg">$</span> <span class="ct">cat</span> <span style="color:var(--text)">mision.txt</span></div>
+        <div style="color:var(--muted)">→ Documentar, aprender y compartir</div>
+        <div style="margin-top:7px"><span class="cg">$</span> <span class="ct">ls</span> <span style="color:var(--text)">categorias/</span></div>
+        <div><span class="cp">analisis</span> <span class="ct">noticias</span> <span style="color:var(--text)">anecdotas</span></div>
+        <div><span style="color:var(--muted)">herramientas</span> <span style="color:var(--text)">tutoriales</span> <span style="color:var(--li)">cti</span></div>
+        <div style="margin-top:7px"><span class="cg">$</span> <span class="cur"></span></div>
+      </div>
+      <div class="tfoot-bar">
+        <span class="tfoot-l">hack &amp; aprende</span>
+        <span class="tfoot-r"><span class="online-dot"></span>online</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div>
+      <div class="sw"><span class="sico">&#128269;</span><input type="text" id="si" placeholder="Buscar en el blog..."></div>
+      <div class="fb">
+        <span class="flbl">Filtrar:</span>
+        <button class="chip ca on" id="fa"  onclick="setF('all',this)">Todos</button>
+        <button class="chip cn"    id="fn"  onclick="setF('analisis',this)">Análisis</button>
+        <button class="chip cno"   id="fno" onclick="setF('noticias',this)">Noticias</button>
+        <button class="chip ce"    id="fe"  onclick="setF('anecdotas',this)">Anécdotas</button>
+        <button class="chip ch"    id="fh"  onclick="setF('herramientas',this)">Herramientas</button>
+        <button class="chip ctu"   id="ftu" onclick="setF('tutoriales',this)">Tutoriales</button>
+        <button class="chip cc"    id="fc"  onclick="setF('cti',this)">CTI</button>
+      </div>
+      <div id="loading" class="loading">Cargando posts...</div>
+      <div class="pl" id="pl"></div>
+      <div class="nr" id="nr">No se encontraron posts.</div>
+      <div class="estate" id="es"><h3>Sin posts</h3><p>El administrador no ha publicado entradas.</p></div>
+    </div>
+    <aside class="sb">
+      <div class="sbb"><div class="sbh"><span>&#9658;</span> Categorías</div><div class="sbd" id="sbc"></div></div>
+      <div class="sbb"><div class="sbh"><span>&#9658;</span> Recientes</div><div class="sbd" id="sbr"></div></div>
+      <div class="sbb"><div class="sbh"><span>&#9658;</span> Tags</div><div class="sbd"><div class="tagc" id="sbt"></div></div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="aw" id="aw">
+  <div class="ainr">
+    <button class="bbtn" onclick="goHome()">&#8592; Volver</button>
+    <div class="aeye"><span class="badge" id="ab2"></span><span class="cdate" id="adt"></span></div>
+    <h1 class="atit" id="atit"></h1>
+    <div class="ameta"><span>Hack &amp; Aprende</span><span class="asep">·</span><span id="art2"></span><span class="asep">·</span><span id="acat"></span></div>
+    <div class="abody" id="abdy"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="fleft"><strong>HACK &amp; APRENDE</strong> · Bitácora de ciberseguridad</div>
+  <div class="ftags"><span class="ftag">CTI</span><span class="ftag">OSINT</span><span class="ftag">Malware</span><span class="ftag">Red Team</span></div>
+</footer>
+
+<!-- POSTS DATA — stored as JSON to avoid JS string parsing issues -->
+<script id="posts-data" type="application/json">
+[
+  {
+    "id": 7,
+    "title": "Imágenes Íntimas sin Consentimiento: Qué Hacer si Tu Hijo es Víctima",
+    "excerpt": "La IA ha convertido la creación de imágenes falsas en algo accesible para cualquiera. StopNCII.org es la plataforma global que actúa para detener su difusión. Guía completa para padres en Perú.",
+    "content": "## El Problema Real: IA y Abuso de Imágenes\n\nLa inteligencia artificial ha cambiado el panorama del abuso digital de forma dramática. Herramientas accesibles permiten hoy generar imágenes y videos falsos pero hiperrealistas de cualquier persona, incluyendo **menores de edad**, usando una sola fotografía de redes sociales.\n\nEsto ha disparado dos tipos de amenazas:\n\n- **NCII (Non-Consensual Intimate Images)**: imágenes íntimas reales filtradas sin consentimiento\n- **Deepfakes sexuales**: imágenes o videos íntimos generados con IA de personas reales que nunca existieron\n\n> Cualquier menor con presencia en redes sociales es un objetivo potencial. No es necesario haber hecho algo mal para ser víctima.\n\n## Qué es StopNCII.org y Para Qué Sirve\n\n**StopNCII** (Stop Non-Consensual Intimate Images) es una plataforma internacional sin fines de lucro, creada por la **Internet Watch Foundation**, disponible para usuarios de todo el mundo incluyendo Perú.\n\nSu función principal es crear una **huella digital cifrada (hash)** de la imagen comprometida y distribuirla automáticamente a las plataformas asociadas para que bloqueen cualquier intento de subir o compartir ese contenido, **sin que nadie vea la imagen original**.\n\n### Plataformas asociadas que bloquean el contenido\n\n- Facebook e Instagram (Meta)\n- TikTok\n- Snapchat\n- Reddit\n- OnlyFans\n- Bumble\n- Principales sitios para adultos\n\n## Guía para Padres: Pasos Inmediatos si Tu Hijo es Víctima\n\n### PASO 1 — Mantén la calma y acompa\u00f1a a tu hijo\n**Tu hijo necesita saber que no es su culpa.** El abuso de imágenes produce vergüenza, miedo y aislamiento. Tu reacción inicial define si acudira a ti en el futuro.\n\n- No culpes ni interrogues de forma agresiva\n- Valida sus emociones: eschúchalo sin juzgarlo\n- Deja claro que van a resolverlo juntos\n\n### PASO 2 — Documenta Antes de Eliminar\nAntes de borrar cualquier contenido, **toma capturas de pantalla** que incluyan URL completa, fecha y hora visible, y nombre del perfil que publico. Esta documentación es clave para la denuncia.\n\n### PASO 3 — Crea el caso en StopNCII.org\n\n- Ve a **stopncii.org** desde un navegador privado\n- Selecciona el idioma Español\n- Clic en **Crea tu caso**\n- Sube la imagen: se genera un hash cifrado y se elimina el archivo de sus servidores\n- El hash bloquea el contenido en todas las plataformas asociadas automaticamente\n- Recibirás un número de caso para hacer seguimiento\n\nPara menores de edad: un padre, madre o tutor legal debe gestionar el proceso.\n\n### PASO 4 — Denuncia ante el Ministerio Público del Perú\n\nPresenta tu denuncia en la **Fiscalía de tu distrito** o en la **Unidad de Investigación de Delitos Informáticos de la PNP** (Policia Nacional del Peru).\n\n- La fiscalía puede iniciar investigación de oficio\n- Lleva contigo las capturas del Paso 2\n- Puedes denunciar tambien en línea vía **fiscalia.gob.pe**\n\n### PASO 5 — Denuncia en la Policía Nacional del Perú\n\nDirígete a la **División de Investigación de Delitos de Alta Tecnología (DIVINDAT)** de la PNP o a la comisaría más cercana. La difusion de imagenes intimas de menores es un **delito grave** tipificado en el Código Penal peruano.\n\n- DIVINDAT Lima: Jr. Tomas Marsano 2021, Surquillo\n- Línea PNP: **105** (emergencias)\n- Central PNP: **(01) 431-8921**\n\n### PASO 6 — Denuncia ante el MINEDU y el INDECOPI\n\n- **MINEDU** (si ocurre en entorno escolar): **0800-11-400** (gratuito)\n- **INDECOPI**: puede actuar contra plataformas digitales por vulneración de datos personales\n- Web: **indecopi.gob.pe**\n\n### PASO 7 — Apoyo Psicológico Inmediato\n\n- **Línea 100**: atención a víctimas de violencia familiar y sexual (gratuito, 24h)\n- **Chat 100**: chat.mimp.gob.pe\n- **CEM (Centro de Emergencia Mujer)**: atención a mujeres, niños y adolescentes víctimas\n- Psicologo especializado en trauma digital\n\n## Para Adultos: El Mismo Proceso\n\nSi eres adulto y eres victima, el proceso es idéntico. StopNCII.org funciona igual para mayores de 18 años y puedes gestionar el caso directamente. En Peru, la Ley N 30171 y el articulo 154-B del Codigo Penal sancionan la difusión de imágenes íntimas sin consentimiento.\n\n## Acciones Preventivas para Padres\n\n- **Configura cuentas privadas** en todas las redes sociales de tus hijos\n- **Habla abiertamente** sobre estos riesgos sin generar pánico\n- Explica que ninguna imagen en redes es completamente privada\n- Activa los controles parentales en dispositivos\n- Ense\u00f1a a tus hijos a no compartir imagenes bajo ninguna presión\n- Si alguien los amenaza, deben contártelo sin miedo a ser culpados\n\n## Marco Legal en Perú\n\n- **Articulo 154-B del Codigo Penal**: difusión de imágenes, materiales audiovisuales o audios con contenido sexual sin consentimiento — pena privativa de libertad de 2 a 6 años\n- **Ley N 30171**: delitos informáticos incluyendo acoso virtual y pornografía infantil\n- **Ley N 31514**: fortalece la protección de niños y adolescentes frente a contenido digital dañino\n\n## Recursos Directos para Perú\n\n- **StopNCII.org** — Plataforma internacional de hash y bloqueo\n- **Línea 100** — Atención a víctimas (gratuito, 24h)\n- **Chat 100** — chat.mimp.gob.pe\n- **105** — Emergencias PNP\n- **DIVINDAT PNP** — División de delitos informáticos\n- **0800-11-400** — MINEDU (gratuito)\n- **fiscalia.gob.pe** — Denuncia virtual al Ministerio Público\n- **indecopi.gob.pe** — Vulneración de datos personales",
+    "category": "noticias",
+    "tags": ["NCII", "deepfakes", "IA", "menores", "StopNCII", "Perú", "privacidad"],
+    "date": "2026-05-24"
+  },
+  {
+    "id": 6,
+    "title": "Tus Trucos DNS No Te Darán Privacidad Real",
+    "excerpt": "Herramientas como DoH, Pi-hole, Cloudflare y Quad9 reducen tu exposición DNS, pero no impiden que tu ISP sepa qué sitios visitas.",
+    "content": "## El Concepto Erróneo Crítico\n\nHerramientas como DNS cifrado, Pi-hole, Unbound, Cloudflare y Quad9 **reducen** la exposición de tus consultas DNS, pero **no impiden** que tu ISP sepa que sitios web visitas.\n\n## Qué es el DNS\n\nEl DNS actúa como la guía telefónica de Internet: traduce nombres de dominio en direcciones IP. Históricamente, estas consultas viajaban en texto plano.\n\n## Las Herramientas y Sus Limitaciones\n\n- **Cloudflare (1.1.1.1)**: resolver público con DoH/DoT\n- **Quad9 (9.9.9.9)**: DNS con privacidad y seguridad\n- **Pi-hole**: bloqueador local de anuncios\n- **Unbound**: resolver recursivo sin intermediarios\n- **DoH/DoT**: cifran consultas DNS\n\n## La Demostración Práctica\n\nUsando una **Raspberry Pi como analizador de red**, se capturaron paquetes de navegadores con DNS seguro. Los destinos eran completamente visibles vía SNI.\n\nSitios identificados: `nvidia.com`, `cisco.com`, `chatgpt.com`, `canva.com`\n\n> El ISP puede ver estos destinos vía SNI aunque el DNS esté completamente cifrado.\n\n## Cómo el ISP Te Sigue Viendo\n\n### 01. SNI — Server Name Indication\nEl navegador envía el campo SNI **en texto plano** al establecer HTTPS, revelando el dominio antes del cifrado.\n\n### 02. Dirección IP de Destino\nTu ISP ve a qué IP se conecta tu dispositivo. Vía WHOIS puede inferir el servicio.\n\n### 03. DPI — Inspección Profunda de Paquetes\nAnálisis de patrones de tráfico a nivel de capa 7 identifica servicios sin ver el contenido.\n\n### 04. Metadatos de Conexión\nVolumen, duración y frecuencia forman un perfil de comportamiento preciso.\n\n## Soluciones Efectivas\n\n### VPN Confiable\nCifra todo el tráfico. El ISP solo ve la conexión al servidor VPN.\n\n### Red Tor\nMúltiples nodos cifrados. Ningún nodo conoce origen y destino a la vez.\n\n### DNS Cifrado más VPN\nLa combinación más efectiva y accesible. Eliminas al ISP como resolver y observador.\n\n## Conclusión\n\nLa privacidad real requiere cifrar **todo el flujo de tráfico**, no solo las consultas DNS.\n\n> El nivel de privacidad debe calibrarse según tu modelo de amenaza personal.",
+    "category": "analisis",
+    "tags": ["DNS", "privacidad", "ISP", "SNI", "VPN", "DoH"],
+    "date": "2026-05-22"
+  },
+  {
+    "id": 1,
+    "title": "Por Qué el Adversario Estudió Historia y el Defensor No",
+    "excerpt": "Los servicios de inteligencia actuales son herederos directos de décadas de Guerra Fría. Sus técnicas no son nuevas, solo digitalizadas.",
+    "content": "## El Contexto Histórico\n\nLos servicios de inteligencia que operan hoy —FSB, MSS, RGB— son herederos directos de organizaciones que perfeccionaron el **tradecraft** durante décadas de Guerra Fría.\n\n> El adversario llegó con un manual de 70 años de antigüedad.\n\n## La Brecha Doctrinal\n\nLa industria enseña CVEs y frameworks técnicos. Pero casi ningún programa enseña **cómo piensa el adversario**.\n\n### Qué es el tradecraft\n\nEl conjunto de técnicas operacionales de inteligencia: vigilancia, contravigilancia, comunicaciones encubiertas y operaciones de influencia.\n\n## Frameworks que Si lo Estudian\n\n- **MITRE ATT&CK**: documenta TTPs reales de grupos APT\n- **Cyber Kill Chain**: las 7 fases de un ataque\n- **F3EAD**: ciclo operacional militar adaptado al threat hunting\n\n## Recomendacion\n\nEstudia a los actores, no solo las vulnerabilidades. Los informes de Mandiant, CrowdStrike y Microsoft MSTIC son públicos y gratuitos.",
+    "category": "analisis",
+    "tags": ["FSB", "MSS", "doctrina", "MITRE"],
+    "date": "2025-05-18"
+  },
+  {
+    "id": 2,
+    "title": "Guía Rápida: MITRE ATT&CK para Defensores",
+    "excerpt": "Aprende a usar el framework más importante de la industria para mapear comportamientos adversariales y mejorar tu detección.",
+    "content": "## Qué es MITRE ATT&CK\n\nBase de conocimiento publica que documenta las **tácticas, técnicas y procedimientos** usados por actores de amenaza reales.\n\n## Las Tácticas Principales\n\n- **Reconnaissance**: recolección de información previa\n- **Initial Access**: cómo el atacante entra a la red\n- **Execution**: cómo ejecuta código malicioso\n- **Persistence**: cómo mantiene acceso a largo plazo\n- **Defense Evasion**: cómo evita ser detectado\n- **Lateral Movement**: cómo se mueve por la red\n\n## Cómo Usarlo\n\nCuando analices un incidente, mapea cada técnica al framework para identificar qué actor coincide con ese patrón.\n\n> attack.mitre.org es gratuito y contiene perfiles de más de 130 grupos activos.\n\n## Herramientas Complementarias\n\n- **ATT&CK Navigator**: visualiza coberturas de detección\n- **Atomic Red Team**: prueba tecnicas en tu entorno",
+    "category": "tutoriales",
+    "tags": ["MITRE", "ATT&CK", "TTPs", "detección"],
+    "date": "2025-05-17"
+  },
+  {
+    "id": 3,
+    "title": "CTI en la Práctica: Cómo Perfilar un Actor de Amenaza",
+    "excerpt": "Inteligencia sobre amenazas no es solo recopilar IOCs. Es entender quién es el adversario, por qué actúa y qué hará después.",
+    "content": "## Más Allá de los IOCs\n\nLa **Cyber Threat Intelligence** en su forma básica consume IPs, dominios y hashes. Pero la CTI estratégica va mucho mas lejos.\n\n## El Modelo de Diamante\n\n- **Adversario**: quién es, sus motivaciones y capacidades\n- **Infraestructura**: servidores, dominios, herramientas\n- **Capacidades**: malware, exploits, TTPs\n- **Victima**: a quién atacan y por que\n\n## Perfilar un Actor\n\n### 1. Identificar Victimología\n¿A qué sectores o países apunta?\n\n### 2. Analizar TTPs en ATT&CK\nCada tecnica es una huella digital del grupo.\n\n### 3. Determinar Motivación\n- *Financiera*: predice ransomware\n- *Espionaje*: predice sigilo\n- *Sabotaje*: predice destrucción\n\n> Un actor financiero se comporta diferente a uno que busca acceso de largo plazo.",
+    "category": "cti",
+    "tags": ["CTI", "APT", "perfilado", "inteligencia"],
+    "date": "2025-05-15"
+  },
+  {
+    "id": 4,
+    "title": "Herramienta del Mes: Shodan para Defensores",
+    "excerpt": "Shodan no es solo para atacantes. Úsalo para mapear tu superficie de exposición antes que el adversario.",
+    "content": "## Qué es Shodan\n\nShodan indexa dispositivos conectados a internet: servidores, cámaras, routers, sistemas SCADA y paneles de administración expuestos.\n\n## Por Qué Usarlo\n\nAntes de que el adversario haga reconocimiento, **tu puedes hacerlo primero**.\n\n## Búsquedas Esenciales\n\n- `org:TuEmpresa` — todos los activos indexados\n- `hostname:tudominio.com` — subdominios expuestos\n- `ssl:tudominio.com` — certificados asociados\n\n## Casos de Uso Defensivo\n\n- Descubrir puertos expuestos accidentalmente\n- Encontrar paneles sin autenticación\n- Identificar software desactualizado\n\n## Alternativas\n\n- **Censys** — API más detallada\n- **GreyNoise** — filtra ruido de scanners\n\n> La superficie que no conoces es la que mas te preocupa.",
+    "category": "herramientas",
+    "tags": ["Shodan", "OSINT", "exposición", "reconocimiento"],
+    "date": "2025-05-12"
+  },
+  {
+    "id": 5,
+    "title": "Mi Primera Auditoría: Lo Que Nadie Te Dice",
+    "excerpt": "Anecdota de la primera vez que realize una prueba de penetracion profesional. Spoiler: salio todo lo que no debia.",
+    "content": "## El Encargo\n\nEmpresa mediana, red interna. Me dijeron que el entorno estaba asegurado. No lo estaba.\n\n## El Descubrimiento\n\nTras un escaneo con **Nmap**, encontre un puerto 8080 abierto. Un panel legacy con credenciales por defecto.\n\n> Ese momento en que ves acceso root es igual de impactante siempre.\n\n## Lo Que Aprendi\n\n### Los activos olvidados son los más peligrosos\nNadie monitoreaba ese servicio porque nadie sabía que existía.\n\n### El factor humano siempre aparece\nEl servicio llevaba expuesto **18 meses**. Tres cambios de IT y nadie lo inventarió.\n\n### El reporte importa tanto como el hallazgo\nDocumentar el impacto convierte un hallazgo tecnico en decisión ejecutiva.\n\n## Consejo\n\nNo subestimes los entornos pequenos. Los más descuidados suelen ser los más interesantes.",
+    "category": "anecdotas",
+    "tags": ["pentest", "auditoría", "lecciones"],
+    "date": "2025-05-10"
+  }
+]
+</script>
+
+<script>
+var CM = {
+  analisis:     {l:'Analisis',    c:'#a855f7', b:'ba'},
+  noticias:     {l:'Noticias',    c:'#00c8ff', b:'bn'},
+  anecdotas:    {l:'Anecdotas',   c:'#ffd60a', b:'be'},
+  herramientas: {l:'Herramientas',c:'#60a5fa', b:'bh'},
+  tutoriales:   {l:'Tutoriales',  c:'#ff2d55', b:'btu'},
+  cti:          {l:'CTI',         c:'#a3e635', b:'bc'}
+};
+
+var PS = [];
+var CF = 'all';
+
+function loadPosts() {
+  var el = document.getElementById('posts-data');
+  if (el) {
+    try { PS = JSON.parse(el.textContent); } catch(e) { PS = []; }
+  }
+  document.getElementById('loading').style.display = 'none';
+  renderP();
+  renderSB();
+}
+
+function goHome() {
+  document.getElementById('hw').style.display = 'block';
+  document.getElementById('aw').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+function goArt() {
+  document.getElementById('hw').style.display = 'none';
+  document.getElementById('aw').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function getFilt() {
+  var q = document.getElementById('si').value.toLowerCase();
+  var out = [];
+  for (var i = 0; i < PS.length; i++) {
+    var p = PS[i];
+    var ok = (CF === 'all' || p.category === CF);
+    if (ok && q) {
+      var ts = p.tags.join(' ').toLowerCase();
+      ok = p.title.toLowerCase().indexOf(q) !== -1 ||
+           p.excerpt.toLowerCase().indexOf(q) !== -1 ||
+           ts.indexOf(q) !== -1;
+    }
+    if (ok) out.push(p);
+  }
+  return out;
+}
+
+function renderP() {
+  var list = document.getElementById('pl');
+  var nr   = document.getElementById('nr');
+  var es   = document.getElementById('es');
+  var tc   = document.getElementById('tc');
+  var lu   = document.getElementById('lastup');
+  list.innerHTML = '';
+  nr.style.display = 'none';
+  es.style.display = 'none';
+  tc.textContent = PS.length;
+  if (PS.length > 0) {
+    var d = PS[0].date.split('-');
+    var M = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    lu.textContent = parseInt(d[2],10) + ' ' + M[parseInt(d[1],10)-1];
+  }
+  var filt = getFilt();
+  if (PS.length === 0) { es.style.display = 'block'; return; }
+  if (filt.length === 0) { nr.style.display = 'block'; return; }
+  for (var i = 0; i < filt.length; i++) {
+    var p = filt[i];
+    var m = CM[p.category] || CM.analisis;
+    var card = document.createElement('div'); card.className = 'card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    var top = document.createElement('div'); top.className = 'ctop';
+    var bdg = document.createElement('span'); bdg.className = 'badge ' + m.b; bdg.textContent = m.l;
+    var dat = document.createElement('span'); dat.className = 'cdate'; dat.textContent = fd(p.date);
+    top.appendChild(bdg); top.appendChild(dat);
+    var tit = document.createElement('div'); tit.className = 'ctit'; tit.textContent = p.title;
+    var exc = document.createElement('div'); exc.className = 'cexc'; exc.textContent = p.excerpt;
+    var ft  = document.createElement('div'); ft.className = 'cfoot';
+    var tgs = document.createElement('span');
+    var tg3 = p.tags.slice(0,3);
+    var tstr = '';
+    for (var j = 0; j < tg3.length; j++) tstr += (j > 0 ? ' ' : '') + '#' + tg3[j];
+    tgs.textContent = tstr;
+    var rm = document.createElement('span'); rm.className = 'rm'; rm.textContent = 'Leer →';
+    ft.appendChild(tgs); ft.appendChild(rm);
+    card.appendChild(top); card.appendChild(tit); card.appendChild(exc); card.appendChild(ft);
+    (function(pid){ card.onclick = function(){ openA(pid); }; })(p.id);
+    list.appendChild(card);
+  }
+}
+
+function renderSB() {
+  var sbc = document.getElementById('sbc');
+  var sbr = document.getElementById('sbr');
+  var sbt = document.getElementById('sbt');
+  var key, m, count, i, p, li, cl, dot, nm, cn, div, rc, rt, rd, tset, tkeys, sp;
+  sbc.innerHTML = '';
+  for (key in CM) {
+    m = CM[key]; count = 0;
+    for (i = 0; i < PS.length; i++) if (PS[i].category === key) count++;
+    li = document.createElement('div'); li.className = 'citem';
+    cl = document.createElement('div'); cl.className = 'cleft';
+    dot = document.createElement('span'); dot.className = 'cdot'; dot.style.background = m.c;
+    nm = document.createElement('span'); nm.className = 'cnam'; nm.textContent = m.l;
+    cl.appendChild(dot); cl.appendChild(nm);
+    cn = document.createElement('span'); cn.className = 'cco'; cn.textContent = count;
+    li.appendChild(cl); li.appendChild(cn);
+    (function(k){ li.onclick = function(){ setF(k, null); }; })(key);
+    sbc.appendChild(li);
+  }
+  sbr.innerHTML = '';
+  for (i = 0; i < PS.length && i < 4; i++) {
+    p = PS[i]; m = CM[p.category] || CM.analisis;
+    div = document.createElement('div'); div.className = 'ritem';
+    rc = document.createElement('div'); rc.className = 'rca'; rc.style.color = m.c; rc.textContent = m.l;
+    rt = document.createElement('div'); rt.className = 'rtt'; rt.textContent = p.title;
+    rd = document.createElement('div'); rd.className = 'rda'; rd.textContent = fd(p.date);
+    div.appendChild(rc); div.appendChild(rt); div.appendChild(rd);
+    (function(pid){ div.onclick = function(){ openA(pid); }; })(p.id);
+    sbr.appendChild(div);
+  }
+  sbt.innerHTML = '';
+  tset = {};
+  for (i = 0; i < PS.length; i++) for (var j = 0; j < PS[i].tags.length; j++) tset[PS[i].tags[j]] = 1;
+  tkeys = [];
+  for (key in tset) tkeys.push(key);
+  for (i = 0; i < tkeys.length && i < 20; i++) {
+    sp = document.createElement('button'); sp.className = 'tagp'; sp.textContent = '#' + tkeys[i];
+    (function(tg){ sp.onclick = function(){ document.getElementById('si').value = tg; renderP(); }; })(tkeys[i]);
+    sbt.appendChild(sp);
+  }
+}
+
+function setF(cat, btn) {
+  CF = cat;
+  var chips = document.querySelectorAll('.chip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('on');
+  if (btn) { btn.classList.add('on'); }
+  else {
+    var map = {all:'fa',analisis:'fn',noticias:'fno',anecdotas:'fe',herramientas:'fh',tutoriales:'ftu',cti:'fc'};
+    var el = document.getElementById(map[cat]);
+    if (el) el.classList.add('on');
+  }
+  renderP();
+}
+
+function openA(id) {
+  var p = null;
+  for (var i = 0; i < PS.length; i++) if (PS[i].id === id) { p = PS[i]; break; }
+  if (!p) return;
+  var m = CM[p.category] || CM.analisis;
+  var b = document.getElementById('ab2'); b.className = 'badge ' + m.b; b.textContent = m.l;
+  document.getElementById('adt').textContent  = fd(p.date);
+  document.getElementById('atit').textContent = p.title;
+  document.getElementById('art2').textContent = rt(p.content) + ' min de lectura';
+  document.getElementById('acat').textContent = m.l;
+  document.getElementById('abdy').innerHTML   = parseMD(p.content);
+  goArt();
+}
+
+function parseMD(md) {
+  var lines = md.split('\n'), html = '', inL = false, line;
+  for (var i = 0; i < lines.length; i++) {
+    line = lines[i];
+    if (line.indexOf('## ') === 0)       { if(inL){html+='</ul>';inL=false;} html += '<h2>' + ifmt(line.slice(3)) + '</h2>'; }
+    else if (line.indexOf('### ') === 0) { if(inL){html+='</ul>';inL=false;} html += '<h3>' + ifmt(line.slice(4)) + '</h3>'; }
+    else if (line.indexOf('> ') === 0)   { if(inL){html+='</ul>';inL=false;} html += '<blockquote>' + ifmt(line.slice(2)) + '</blockquote>'; }
+    else if (line.indexOf('- ') === 0)   { if(!inL){html+='<ul>';inL=true;} html += '<li>' + ifmt(line.slice(2)) + '</li>'; }
+    else if (line.trim() === '')         { if(inL){html+='</ul>';inL=false;} }
+    else                                 { if(inL){html+='</ul>';inL=false;} html += '<p>' + ifmt(line) + '</p>'; }
+  }
+  if (inL) html += '</ul>';
+  return html;
+}
+
+function ifmt(t) {
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/\*(.+?)\*/g,     '<em>$1</em>');
+  t = t.replace(/`(.+?)`/g,       '<code>$1</code>');
+  return t;
+}
+
+function fd(s) {
+  if (!s) return '';
+  var p = s.split('-');
+  var M = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return parseInt(p[2],10) + ' ' + M[parseInt(p[1],10)-1] + ' ' + p[0];
+}
+
+function rt(txt) { return Math.max(1, Math.ceil(txt.trim().split(/\s+/).length / 200)); }
+
+document.getElementById('si').addEventListener('input', function(){ renderP(); });
+loadPosts();
+</script>
+</body>
+</html>
